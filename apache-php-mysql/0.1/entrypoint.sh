@@ -107,6 +107,28 @@ else
 	echo "INFO: $PHPMYADMIN_HOME/config.inc.php already exists."
 fi
 
+# Import data
+# TODO import only if DB is empty.
+# Check if DB is empty
+for f in $APP_HOME/_import/*; do
+	 case "$f" in
+		 *.sql)
+			echo "Importing $f into ${DATABASE_NAME} ..."
+			mysql -u "${DATABASE_USERNAME}" -p"${DATABASE_PASSWORD}" "${DATABASE_NAME}" < "$f"
+			if [ $? -eq 0 ]; then
+				echo "Successfully imported ${f}."
+				mv "$f" "${f}".imported
+			fi
+			;;
+		 *.sql.gz)
+			echo "$0: running $f"
+			gunzip -c "$f" | mysql -u "${DATABASE_USERNAME}" -p"${DATABASE_PASSWORD}" "${DATABASE_NAME}"
+			echo
+			;;
+	 esac
+	 echo
+done
+
 echo "Loading phpMyAdmin conf ..."
 if ! grep -q "^Include conf/httpd-phpmyadmin.conf" $HTTPD_CONF_FILE; then
 	echo 'Include conf/httpd-phpmyadmin.conf' >> $HTTPD_CONF_FILE
