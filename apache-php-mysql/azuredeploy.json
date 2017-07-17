@@ -24,6 +24,26 @@
                 "S2",
                 "S3"
             ]
+        },
+        "databaseName": {
+            "type": "string",
+            "defaultValue": "appdb"
+        },
+        "databaseUsername": {
+            "type": "string",
+            "defaultValue": "appuser"
+        },
+        "databasePassword": {
+            "type": "securestring",
+            "defaultValue": "MS173m_QN"
+        },
+        "phpmyadminUsername": {
+            "type": "string",
+            "defaultValue": "phpmyadmin"
+        },
+        "phpmyadminPassword": {
+            "type": "securestring",
+            "defaultValue": "MS173m_QN"
         }
     },
     "resources": [
@@ -32,8 +52,30 @@
             "name": "[parameters('siteName')]",
             "properties": {
                 "siteConfig": {
+                    "appSettings": [
+                        {
+                            "name": "DATABASE_NAME",
+                            "value": "[parameters('databaseName')]"
+                        },
+                        {
+                            "name": "DATABASE_USERNAME",
+                            "value": "[parameters('databaseUsername')]"
+                        },
+                        {
+                            "name": "DATABASE_PASSWORD",
+                            "value": "[parameters('databasePassword')]"
+                        },
+                        {
+                            "name": "PHPMYADMIN_USERNAME",
+                            "value": "[parameters('phpmyadminUsername')]"
+                        },
+                        {
+                            "name": "PHPMYADMIN_PASSWORD",
+                            "value": "[parameters('phpmyadminPassword')]"
+                        }
+                    ],
                     "appCommandLine": "",
-                    "linuxFxVersion": "DOCKER|appsvc/apps:apache-php-postgresql-0.1"
+                    "linuxFxVersion": "DOCKER|fanjeffrey/apm:0.2"
                 },
                 "name": "[parameters('siteName')]",
                 "serverFarmId": "[parameters('servicePlanName')]",
